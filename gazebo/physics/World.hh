@@ -240,6 +240,10 @@ namespace gazebo
       /// \return The real time.
       public: common::Time RealTime() const;
 
+      /// \brief Set the initial sim time.
+      /// \param[in] _t The new simulation time
+      public: void SetInitialSimTime(const common::Time &_t);
+
       /// \brief Returns the state of the simulation true if paused.
       /// \return True if paused.
       public: bool IsPaused() const;
@@ -534,9 +538,15 @@ namespace gazebo
       /// \brief Step callback.
       private: void OnStep();
 
-      /// \brief Called when a world control message is received.
+      /// \brief Called when a world control message is received on the
+      /// gazebo_transport topic using boost asio.
       /// \param[in] _data The world control message.
       private: void OnControl(ConstWorldControlPtr &_data);
+
+      /// \brief Called when a world control message is received on the
+      /// gz-transport topic using ZeroMQ.
+      /// \param[in] _data The world control message.
+      private: void OnWorldControl(const msgs::WorldControl &_data);
 
       /// \brief Called when log playback control message is received.
       /// \param[in] _data The log playback control message.
@@ -667,6 +677,12 @@ namespace gazebo
       /// \param[out] _response Message containing shadow caster material name
       /// \return True if the info was successfully obtained.
       private: bool ShadowCasterMaterialNameService(
+          ignition::msgs::StringMsg &_response);
+
+      /// \brief Callback for "<this_name>/spherical_coordinates_surface_type" service.
+      /// \param[out] _response Message containing spherical coordinates surface type.
+      /// \return True if the info was successfully obtained.
+      public: bool SphericalCoordinatesSurfaceService(
           ignition::msgs::StringMsg &_response);
 
       /// \brief Callback for "<this_name>/shadow_caster_render_back_faces"
